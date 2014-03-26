@@ -35,11 +35,11 @@ var shard1  = { url: 'http://localhost:3000', append: true }
   , key     = sharder.generate()
 
 console.log(sharder.resolve(key))
-// { url: 'http://localhost:3000', append: true }
+// { url: 'http://localhost:3000', append: true, id: 1 }
 console.log(sharder.resolve(key))
-// { url: 'http://localhost:3000', append: true }
+// { url: 'http://localhost:3000', append: true, id: 1 }
 console.log(sharder.resolve(key))
-// { url: 'http://localhost:3000', append: true }
+// { url: 'http://localhost:3000', append: true, id: 1 }
 ```
 
 ## API
