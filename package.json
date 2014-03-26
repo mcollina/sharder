@@ -1,7 +1,7 @@
 {
   "name": "sharder",
   "version": "0.0.0",
-  "description": "A sharding system based on a byte-index and random bytes",
+  "description": "Generate 128 bits keys and resolve them to shards",
   "main": "index.js",
   "scripts": {
     "test": "tap --timeout 1 test.js"
