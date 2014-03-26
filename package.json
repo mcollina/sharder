@@ -1,6 +1,6 @@
 {
   "name": "sharder",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Generate 128 bits keys and resolve them to shards",
   "main": "index.js",
   "scripts": {
