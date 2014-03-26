@@ -1,0 +1,18 @@
+{
+  "name": "sharder",
+  "version": "0.0.0",
+  "description": "A sharding system based on a byte-index and random bytes",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap --timeout 1 test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tap": "~0.4.8",
+    "pre-commit": "0.0.4"
+  },
+  "dependencies": {
+    "uuid": "~1.4.1"
+  }
+}
