@@ -7,7 +7,6 @@ A shard can be just any JS object
   * <a href="#install">Installation</a>
   * <a href="#basic">Basic Example</a>
   * <a href="#api">API</a>
-  * <a href="#wildcards">Wildcards</a>
   * <a href="#licence">Licence &amp; copyright</a>
 
 <a name="install"></a>
