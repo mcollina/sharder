@@ -26,9 +26,9 @@ var shard1  = { url: 'http://localhost:3000', append: true }
   , shard3  = { url: 'http://localhost:3002', append: false }
   , sharder = require('sharder')({
                 shards: {
-                  1: shard1,
-                  2: shard2,
-                  3: shard3
+                    1: shard1
+                  , 2: shard2
+                  , 3: shard3
                 }
               })
 
