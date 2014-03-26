@@ -99,3 +99,16 @@ test('resolve the same key to the right shard', function(t) {
   t.equal(instance.resolve(key), shard1)
   t.equal(instance.resolve(key), shard1)
 })
+
+test('should not generate keys for the non-append shard', function(t) {
+  t.plan(3)
+
+  var shard1    = { id: 1, append: true }
+    , shard2    = { id: 2, append: true }
+    , shard3    = { id: 2, append: false }
+    , instance  = sharder({ shards: { 1: shard1, 2: shard2, 3: shard3 } })
+
+  t.equal(instance.resolve(instance.generate()), shard1)
+  t.equal(instance.resolve(instance.generate()), shard2)
+  t.equal(instance.resolve(instance.generate()), shard1)
+})
