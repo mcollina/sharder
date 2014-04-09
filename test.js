@@ -50,6 +50,16 @@ test('generate a string long 36 chars', function(t) {
   t.equal(key.length, 36)
 })
 
+test('assume a append:true as a default', function(t) {
+  t.plan(2)
+
+  var instance = sharder({ shards: { 1: { } } })
+    , key      = instance.generate()
+
+  t.equal(typeof key, 'string')
+  t.equal(key.length, 36)
+})
+
 test('generate uniquish strings', function(t) {
 
   var instance = sharder({ shards: { 1: { append: true } } })

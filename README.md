@@ -61,7 +61,7 @@ A sharder accepts the following options:
 
 
 Every shard might include a `append: true` property, to identify
-it is writable.
+it is writable. This property is defaulted to true.
 
 Example
 

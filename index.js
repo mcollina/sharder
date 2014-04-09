@@ -15,7 +15,7 @@ function Sharder(config) {
       config.shards[shardId].id = parseInt(shardId)
       return config.shards[shardId]
     }).filter(function(shard) {
-      return shard.append
+      return shard.append === undefined || shard.append
     })
 
   this._lastCreatedCounter = 0
