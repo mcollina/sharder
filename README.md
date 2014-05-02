@@ -2,7 +2,7 @@ sharder&nbsp;&nbsp;[![Build Status](https://travis-ci.org/mcollina/sharder.png)]
 =================================================================
 
 Generate 128 bits keys and resolve them to shards.
-A shard can be just any JS object
+A shard can be just any JS object.
 
   * <a href="#install">Installation</a>
   * <a href="#basic">Basic Example</a>
@@ -34,12 +34,29 @@ var shard1  = { url: 'http://localhost:3000', append: true }
 
   , key     = sharder.generate()
 
+  , cacher = require('sharder')({
+                cache: true,
+                shards: {
+                    1: shard1
+                  , 2: shard2
+                }
+              })
+
 console.log(sharder.resolve(key))
 // { url: 'http://localhost:3000', append: true, id: 1 }
 console.log(sharder.resolve(key))
 // { url: 'http://localhost:3000', append: true, id: 1 }
 console.log(sharder.resolve(key))
 // { url: 'http://localhost:3000', append: true, id: 1 }
+
+console.log(cacher.generate(new Buffer([1, 2])))
+// 01000000-0000-0000-0000-000000000102
+console.log(cacher.generate(new Buffer([1, 2])))
+// 01000000-0000-0000-0000-000000000102
+console.log(cacher.generate(new Buffer([3, 2])))
+// 02000000-0000-0000-0000-000000000302
+console.log(cacher.generate(new Buffer([3, 2])))
+// 02000000-0000-0000-0000-000000000302
 ```
 
 ## API
@@ -58,10 +75,11 @@ It can be created by `sharder()` or using `new Sharder()`.
 A sharder accepts the following options:
 
 - `shards`: contains a map of shards, identified by a number.
-
+- `cache`: enables cache mode, in this mode all shards must be
+  appendable and generate must be used with a fixed prefix.
 
 Every shard might include a `append: true` property, to identify
-it is writable.
+it is writable. This property is defaulted to true.
 
 Example
 
@@ -86,9 +104,13 @@ new Sharder({
 
 -------------------------------------------------------
 <a name="generate"></a>
-### sharder.generate()
+### sharder.generate([fixedPart])
 
 Generate a uuid-style identifier.
+
+If the sharder is initialized with `cache: true` the fixedPart
+is mandatory, and the id is calculated based on the number
+of bits in the fixedPart.
 
 -------------------------------------------------------
 <a name="resolve"></a>

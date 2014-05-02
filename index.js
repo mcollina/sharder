@@ -1,6 +1,7 @@
-var assert = require('assert')
-  , uuid   = require('uuid')
-  , crypto = require('crypto')
+var assert    = require('assert')
+  , uuid      = require('uuid')
+  , crypto    = require('crypto')
+  , bitcount  = require('bitcount')
 
 function Sharder(config) {
   if (!(this instanceof Sharder))
@@ -15,30 +16,61 @@ function Sharder(config) {
       config.shards[shardId].id = parseInt(shardId)
       return config.shards[shardId]
     }).filter(function(shard) {
-      return shard.append
+      return shard.append === undefined || shard.append
     })
 
-  this._lastCreatedCounter = 0
+  if (!config.cache) {
+    this.generate = generate
+    this._lastCreatedCounter = 0
+  } else {
+    assert.equal(this._appendShards.length, Object.keys(this.shards).length, 'there must be no read-only shards in cache mode')
+    this.generate = generateWithFixedPart
+  }
 
   assert(this._appendShards.length > 0, 'must have at least an append shard')
 }
 
-Sharder.prototype.generate = function generate() {
-
-  var bytes = crypto.pseudoRandomBytes(15)
-    , index = this._lastCreatedCounter % this._appendShards.length
-    , shard = this._appendShards[index]
-    , buf   = Buffer.concat([new Buffer([shard.id]), bytes])
-
-  this._lastCreatedCounter += 1
-
-  return uuid.unparse(buf)
-}
 
 Sharder.prototype.resolve = function resolve(key) {
   var bytes = uuid.parse(key)
 
   return this.shards[bytes[0]]
+}
+
+function encode(shardId, bytes) {
+  var buf = new Buffer(16)
+    , off = 1
+
+  buf[0] = shardId
+
+  if (bytes.length < 15) {
+    buf.fill(0, off, 15 - bytes.length)
+    off += 15 - bytes.length
+  }
+
+  bytes.copy(buf, off)
+
+  return uuid.unparse(buf)
+}
+
+function generate(fixedPart) {
+
+  assert(!fixedPart)
+
+  var index = this._lastCreatedCounter++ % this._appendShards.length
+    , shard = this._appendShards[index]
+
+  return encode(shard.id, crypto.pseudoRandomBytes(15))
+}
+
+function generateWithFixedPart(fixedPart) {
+
+  assert(fixedPart)
+
+  var index = bitcount(fixedPart) % this._appendShards.length
+    , shard = this._appendShards[index]
+
+  return encode(shard.id, fixedPart);
 }
 
 module.exports = Sharder
