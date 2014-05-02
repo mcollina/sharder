@@ -130,7 +130,10 @@ test('basic cache mode', function(t) {
     , shard2    = { id: 2 }
     , instance  = sharder({ cache: true, shards: { 1: shard1, 2: shard2 } })
     , args      = new Buffer(5)
-    , key       = instance.generate(args)
+    , key
+
+  args.fill('a')
+  key = instance.generate(args)
 
   t.equal(instance.generate(args), key)
   t.type(key, 'string')
@@ -157,7 +160,6 @@ test('cache encode to different shards', function(t) {
     var key   = instance.generate(new Buffer(prekey))
       , shard = instance.resolve(key)
 
-    console.log(key, shard)
     t.equal(shard, expected)
   }
 

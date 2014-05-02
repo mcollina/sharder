@@ -39,16 +39,13 @@ Sharder.prototype.resolve = function resolve(key) {
 
 function encode(shardId, bytes) {
   var buf = new Buffer(16)
-    , off = 1
+    , remaining = 16 - bytes.length
+
+  buf.fill(0)
 
   buf[0] = shardId
 
-  if (bytes.length < 15) {
-    buf.fill(0, off, 15 - bytes.length)
-    off += 15 - bytes.length
-  }
-
-  bytes.copy(buf, off)
+  bytes.copy(buf, remaining)
 
   return uuid.unparse(buf)
 }
